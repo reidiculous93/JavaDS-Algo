@@ -1,13 +1,24 @@
-class MaxBinaryHeap {
+class PriorityQueue {
     int[] values;
 
-    public MaxBinaryHeap() {
+    public PriorityQueue() {
         this.values = new int[];
     }
 
-    public MaxBinaryHeap insert(int element) {
-        this.values.push(element);
+    public enqueue(int val, int priority) {
+        Node newNode = new Node(val, priority);
+        this.values.push(newNode);
         this.bubbleUp();
+    }
+
+    public dequeue() {
+        Node min = this.values[0];
+        int end = this.values.pop();
+        if (this.values.length > 0) {
+            this.values[0] = end;
+            this.sinkDown();
+        }
+        return min;
     }
 
     public void bubbleUp() {
@@ -16,23 +27,13 @@ class MaxBinaryHeap {
         while (index > 0) {
             int parentIdx = Math.floor((index - 1) / 2);
             int parent = this.values[parentIdx];
-            if (element <= parent) {
-                break
+            if (element.priority >= parent.priority) {
+                break;
             }
             this.values[parentIdx] = element;
             this.values[index] = parent;
             index = parentIdx;
         }
-    }
-
-    public int extractMax() {
-        int currMax = this.values[0];
-        int end = this.values.pop();
-        if (this.values.length > 0) {
-            this.values[0] = end;
-            this.sinkDown();
-        }
-        return currMax;
     }
 
     public void sinkDown() {
@@ -47,13 +48,16 @@ class MaxBinaryHeap {
             int swap = null;
             if (leftChildIdx < len) {
                 left = this.values[leftChildIdx];
-                if (left > element) {
+                if (left.priority < element.priority) {
                     swap = leftChildIdx;
                 }
             }
             if (rightChildIdx < len) {
                 right = this.values[rightChildIdx];
-                if ((swap == null && right > element) || (swap != null && right > left)) {
+                if(
+                        (swap == null && right.priority < element.priority) ||
+                        (swap != null && right.priority < left.priority))
+                {
                     swap = rightChildIdx;
                 }
             }
@@ -62,5 +66,15 @@ class MaxBinaryHeap {
             this.values[swap] = element;
             idx = swap;
         }
+    }
+}
+
+public class Node {
+    int value;
+    int priority;
+
+    public Node(int value, int priority) {
+        this.value = value;
+        this.priority = priority;
     }
 }
