@@ -96,7 +96,7 @@ class BinarySearchTree {
             if (node.left != null) {
                 DFSPreOrder(node.left);
             }
-            if (node.left != null) {
+            if (node.right != null) {
                 DFSPreOrder(node.right);
             }
         }
